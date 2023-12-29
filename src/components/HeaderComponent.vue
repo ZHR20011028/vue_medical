@@ -86,6 +86,11 @@ export default {
           label: "共享文件",
         },
         {
+          path: "/dutyManage",
+          name: "dutyManage",
+          label: "值班管理",
+        },
+        {
           label: "医药采购平台",
           children: [
             {
@@ -112,21 +117,6 @@ export default {
               path: "/diagnosisLog",
               name: "diagnosisLog",
               label: "诊断日志",
-            },
-          ],
-        },
-        {
-          label: "其他管理",
-          children: [
-            {
-              path: "/dutyManage",
-              name: "dutyManage",
-              label: "值班管理",
-            },
-            {
-              path: "/noticeManage",
-              name: "noticeManage",
-              label: "通知管理",
             },
           ],
         },

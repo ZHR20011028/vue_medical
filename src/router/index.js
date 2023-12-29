@@ -17,7 +17,7 @@ import DrugReview from "@/views/DrugReviewView.vue";
 import LoginLog from "@/views/LoginLogView.vue";
 import DiagnosisLog from "@/views/DiagnosisLogView.vue";
 import DutyManage from "@/views/DutyManageView.vue";
-import NoticeManage from "@/views/NoticeManageView.vue";
+import Error404 from "@/views/404.vue";
 
 const routes = [
   {
@@ -86,17 +86,17 @@ const routes = [
         name: "dutyManage",
         component: DutyManage,
       },
-      {
-        path: "/noticeManage",
-        name: "noticeManage",
-        component: NoticeManage,
-      },
     ],
   },
   {
     path: "/login",
     name: "login",
     component: Login,
+  },
+  {
+    path: "/404",
+    name: "404",
+    component: Error404,
   },
 ];
 const router = new VueRouter({

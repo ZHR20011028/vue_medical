@@ -4,5 +4,8 @@ module.exports = defineConfig({
   lintOnSave: false,
   devServer: {
     port: 8081,
+    client: {
+      overlay: false,
+    },
   },
 });

@@ -1,27 +1,50 @@
 <template>
-  <el-container>
+  <el-container :style="windowStyle">
     <el-header>
       <header-component />
     </el-header>
     <el-main>
       <router-view></router-view>
     </el-main>
-    <el-footer style="height: 35px">Footer</el-footer>
+    <el-footer style="height: 35px">
+      <div class="footer-div">
+        <span>footer</span>
+      </div>
+    </el-footer>
   </el-container>
 </template>
 <script>
 import HeaderComponent from "@/components/HeaderComponent.vue";
 export default {
   data() {
-    return {};
+    return {
+      windowStyle: {
+        width: "100%",
+        height: "100%",
+      },
+    };
   },
   components: {
     HeaderComponent,
+  },
+  mounted() {
+    this.updateWindowSize();
+    window.addEventListener("resize", this.updateWindowSize);
+  },
+  beforeDestroy() {
+    window.removeEventListener("resize", this.updateWindowSize);
+  },
+  methods: {
+    updateWindowSize() {
+      this.windowStyle.width = window.innerWidth + "px";
+      this.windowStyle.height = window.innerHeight + "px";
+    },
   },
 };
 </script>
 <style lang="scss" scoped>
 .el-container {
+  min-width: 100vw;
   .el-header {
     padding: 0;
   }
@@ -29,9 +52,8 @@ export default {
     padding: 0;
   }
   .el-footer {
+    flex: 0;
     width: 100%;
-    position: absolute;
-    bottom: 0px;
     background-color: #f5f5f5;
     border-top: 1px solid #ddd;
   }

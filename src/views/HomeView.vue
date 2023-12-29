@@ -6,16 +6,34 @@
         <p>这里是系统简介</p>
       </el-col>
     </el-row>
-    <el-row class="row_card">
+    <el-row
+      type="flex"
+      justify="space-between"
+      class="row_card"
+      style="min-width: 1288px"
+    >
       <el-col :span="12">
         <el-card class="box-card">
           <div slot="header" class="clearfix">
             <span>近期值班表</span>
           </div>
-          <div v-for="o in 4" :key="o" class="text item">
-            {{ "列表内容 " + o }}
+          <div class="body">
+            <el-table
+              :data="workData"
+              height="180"
+              :row-style="{ height: '0' }"
+              :cell-style="{ padding: '0' }"
+              stripe
+            >
+              <el-table-column prop="workTime" label="日期"> </el-table-column>
+              <el-table-column prop="deptName" label="科室"> </el-table-column>
+              <el-table-column prop="doctorName" label="值班医生">
+              </el-table-column>
+              <el-table-column prop="doctorTelephone" label="联系方式">
+              </el-table-column>
+            </el-table>
           </div>
-          <div class="footer">时间</div>
+          <div class="footer" style="text-align: right">{{ getDate }}</div>
         </el-card>
       </el-col>
       <el-col :span="12">
@@ -26,14 +44,45 @@
           <div v-for="o in 4" :key="o" class="text item">
             {{ "列表内容 " + o }}
           </div>
-          <div class="footer">时间</div>
+          <div class="footer" style="text-align: right">{{ getDate }}</div>
         </el-card>
       </el-col>
     </el-row>
   </el-container>
 </template>
 <script>
-export default {};
+import { getAllWork } from "@/api";
+export default {
+  data() {
+    return {
+      workData: [],
+    };
+  },
+  mounted() {
+    this.getAllDoctorWorks();
+  },
+  methods: {
+    getAllDoctorWorks() {
+      getAllWork().then((data) => {
+        this.workData = data.data.data;
+        console.log(data.data.data);
+      });
+    },
+  },
+  computed: {
+    getDate() {
+      const time = new Date();
+      return (
+        time.getFullYear() +
+        "年" +
+        time.getMonth() +
+        "月" +
+        time.getDate() +
+        "日"
+      );
+    },
+  },
+};
 </script>
 
 <style lang="scss" scoped>
@@ -82,6 +131,7 @@ export default {};
     margin-bottom: 30px;
     .box-card {
       width: 620px;
+      margin: 0 15px;
       /deep/ .el-card__header {
         padding: 10px 20px;
         background-color: #d9edf7;
