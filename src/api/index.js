@@ -5,6 +5,4 @@ export const getAllWork = () => {
   return http.get("/works");
 };
 
-export const getRegisters = () => {
-  return http.get("/registers");
-};
+

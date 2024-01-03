@@ -65,21 +65,14 @@ export default {
     getAllDoctorWorks() {
       getAllWork().then((data) => {
         this.workData = data.data.data;
-        console.log(data.data.data);
       });
     },
   },
   computed: {
     getDate() {
       const time = new Date();
-      return (
-        time.getFullYear() +
-        "年" +
-        time.getMonth() +
-        "月" +
-        time.getDate() +
-        "日"
-      );
+      let month = time.getMonth() + 1;
+      return time.getFullYear() + "年" + month + "月" + time.getDate() + "日";
     },
   },
 };
@@ -87,10 +80,11 @@ export default {
 
 <style lang="scss" scoped>
 .el-container {
+  margin-top: 0;
   flex-direction: column;
   .row_container {
     width: 100%;
-    padding: 48px 0;
+    padding: 35px 0;
     margin-bottom: 30px;
     color: inherit;
     background-color: #eee;

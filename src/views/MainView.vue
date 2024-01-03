@@ -52,7 +52,7 @@ export default {
     padding: 0;
   }
   .el-footer {
-    flex: 0;
+    align-self: flex-end;
     width: 100%;
     background-color: #f5f5f5;
     border-top: 1px solid #ddd;
