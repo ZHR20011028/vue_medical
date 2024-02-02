@@ -1,55 +1,91 @@
 <template>
   <div class="register-container">
-    <div class="search">
-      <el-form :inline="true" :model="searchForm">
-        <el-form-item label="">
-          <el-input
-            v-model="searchForm.deptName"
-            placeholder="请输入要挂号的科室"
-          ></el-input>
-        </el-form-item>
-        <el-form-item>
-          <el-button type="primary" @click="searchDept">搜索</el-button>
-        </el-form-item>
-      </el-form>
+    <div class="registered-header">
+      <el-button
+        size="medium"
+        icon="el-icon-refresh-left"
+        type="primary"
+        @click="refresh"
+      ></el-button>
+      <div class="search">
+        <el-form :model="searchForm">
+          <!-- <el-input
+          v-model="searchForm.deptName"
+          size="medium"
+          placeholder="请输入要挂号的科室"
+        ></el-input> -->
+          <el-select
+            style="width: 100%"
+            size="medium"
+            v-model="searchForm.value"
+            filterable
+            remote
+            placeholder="请输入科室名称"
+            :remote-method="remoteMethod"
+            :loading="searchForm.loading"
+          >
+            <el-option
+              v-for="item in searchForm.options"
+              :key="item.deptId"
+              :label="item.deptName"
+              :value="item.deptId"
+            >
+            </el-option>
+          </el-select>
+          <el-button
+            size="medium"
+            type="primary"
+            icon="el-icon-search"
+            @click="searchDept"
+            >搜索</el-button
+          >
+        </el-form>
+      </div>
     </div>
-    <el-table
-      height="200"
-      v-loading="loading"
-      :data="registerData"
-      style="min-width: 1000px"
-    >
-      <el-table-column prop="deptName" label="科室"> </el-table-column>
-      <el-table-column prop="deptLocation" label="科室地址"> </el-table-column>
-      <el-table-column prop="deptTelephone" label="科室电话"> </el-table-column>
-      <el-table-column label="待诊人数">
-        <template slot-scope="scope">
-          {{
-            scope.row.patientCount === null ? 0 : scope.row.patientCount
-          }}</template
-        >
-      </el-table-column>
-      <el-table-column fixed="right" label="操作">
-        <template slot-scope="scope">
-          <el-button
-            @click="handleRegister(scope.row)"
-            type="info"
-            size="small"
-            icon="el-icon-circle-plus-outline"
-            :disabled="scope.row.disabled"
-            >挂号</el-button
+    <el-card>
+      <el-table
+        border
+        height="450"
+        v-loading="loading"
+        :data="registerData"
+        header-cell-class-name="my-header"
+        style="min-width: 1000px"
+        stripe
+      >
+        <el-table-column prop="deptName" label="科室"> </el-table-column>
+        <el-table-column prop="deptLocation" label="科室地址">
+        </el-table-column>
+        <el-table-column prop="deptTelephone" label="科室电话">
+        </el-table-column>
+        <el-table-column label="待诊人数">
+          <template slot-scope="scope">
+            {{
+              scope.row.patientCount === null ? 0 : scope.row.patientCount
+            }}</template
           >
-          <el-button
-            @click="handleClose(scope.row)"
-            type="info"
-            size="small"
-            icon="el-icon-circle-close"
-            :disabled="!scope.row.disabled"
-            >取消挂号</el-button
-          >
-        </template>
-      </el-table-column>
-    </el-table>
+        </el-table-column>
+        <el-table-column fixed="right" label="操作">
+          <template slot-scope="scope">
+            <el-button
+              @click="handleRegister(scope.row)"
+              type="info"
+              size="small"
+              icon="el-icon-circle-plus-outline"
+              :disabled="scope.row.disabled"
+              >挂号</el-button
+            >
+            <el-button
+              @click="handleClose(scope.row)"
+              type="info"
+              size="small"
+              icon="el-icon-circle-close"
+              :disabled="!scope.row.disabled"
+              >取消挂号</el-button
+            >
+          </template>
+        </el-table-column>
+      </el-table>
+    </el-card>
   </div>
 </template>
 <script>
@@ -60,33 +96,53 @@ import {
   removeRegisters,
   getRegisterByDeptId,
 } from "@/api/registerApi";
-import { getDeptByName } from "@/api/deptApi";
+import { getLikeDept, getDeptByDeptId } from "@/api/deptApi";
+import json_parse from "json-bigint/lib/parse";
 export default {
   data() {
     return {
+      patientId: "",
       registerData: [],
       searchForm: {
-        deptName: "",
+        value: "",
+        options: [],
+        loading: false,
       },
       loading: false,
     };
   },
   mounted() {
+    if (JSON.parse(localStorage.getItem("patientData")) !== null) {
+      this.patientId = JSON.parse(
+        localStorage.getItem("patientData")
+      ).patientId.toString();
+    }
     this.getRegistered();
     this.loading = true;
     let _this = this;
     setTimeout(() => {
       _this.loading = false;
-    }, 4000);
+    }, 3000);
   },
   methods: {
+    refresh() {
+      this.getRegistered();
+      this.searchForm.value = "";
+      this.searchForm.options = [];
+      this.loading = true;
+      let _this = this;
+      setTimeout(() => {
+        _this.loading = false;
+      }, 1500);
+    },
     // 返回挂号的信息
     async getRegistered() {
       let deptId = "";
       try {
-        const deptData = await getRegisterOne(111);
+        const deptData = await getRegisterOne(this.patientId);
         if (deptData.data.code === 20041) {
-          deptId = deptData.data.data.deptId;
+          console.log(deptData.data.data.deptId);
+          deptId = deptData.data.data.deptId.toString();
         }
       } catch (error) {
         console.log(error);
@@ -94,7 +150,7 @@ export default {
       getRegisters().then((data) => {
         //增加一个disabled属性来控制每一个button
         this.registerData = data.data.data.map((item) => {
-          if (deptId === item.deptId) {
+          if (deptId === item.deptId.toString()) {
             return (item = { disabled: true, ...item });
           } else {
             return (item = { disabled: false, ...item });
@@ -105,10 +161,9 @@ export default {
     // 挂号
     handleRegister(row) {
       const register = {
-        deptId: row["deptId"],
-        doctorId: row["doctorId"],
+        deptId: row["deptId"].toString(),
         //登录患者的id，在cookie中获得
-        patientId: "111",
+        patientId: this.patientId,
         deptRank: Number(row["patientCount"]) + 1,
       };
       addRegisters(register).then((data) => {
@@ -119,15 +174,15 @@ export default {
           setTimeout(() => {
             _this.loading = false;
             _this.$notify({
-              title: "成功",
-              message: "挂号成功!",
+              title: "挂号成功!",
+              message: "你为" + register.deptRank + "号，请等待叫号！",
               type: "success",
             });
           }, 2000);
         } else if (data.data.code === 20010) {
           this.$notify({
-            title: "失败",
-            message: "挂号失败！",
+            title: "挂号失败！",
+            message: "请查看是否已经挂号，或者请医生帮助！",
             type: "warning",
           });
         } else if (data.data.code === 59999) {
@@ -138,10 +193,9 @@ export default {
     //取消挂号
     handleClose(row) {
       const register = {
-        deptId: row["deptId"],
-        doctorId: row["doctorId"],
+        deptId: row["deptId"].toString(),
         //登录患者的id，在cookie中获得
-        patientId: "111",
+        patientId: this.patientId,
       };
       removeRegisters(register).then((data) => {
         if (data.data.code === 20021) {
@@ -151,15 +205,14 @@ export default {
           setTimeout(() => {
             _this.loading = false;
             _this.$notify({
-              title: "成功",
-              message: "取消挂号成功!",
+              title: "取消挂号成功!",
               type: "success",
             });
           }, 2000);
         } else if (data.data.code === 20020) {
           this.$notify({
-            title: "失败",
-            message: "取消挂号失败！",
+            title: "取消挂号失败！",
+            message: "请稍后再试！",
             type: "warning",
           });
         } else if (data.data.code === 59999) {
@@ -171,9 +224,11 @@ export default {
       let dept = "";
       let is_get = false;
       try {
-        const deptData = await getDeptByName(this.searchForm);
+        const deptData = await getDeptByDeptId({
+          deptId: this.searchForm.value,
+        });
         if (deptData.data.code === 20041) {
-          dept = deptData.data.data.deptId;
+          dept = deptData.data.data.deptId.toString();
           is_get = true;
         } else {
           is_get = false;
@@ -196,17 +251,67 @@ export default {
         _this.loading = false;
       }, 2000);
     },
+    remoteMethod(query) {
+      if (query !== "") {
+        this.searchForm.loading = true;
+        setTimeout(() => {
+          this.searchForm.loading = false;
+          getLikeDept({ deptLikeName: query }).then((data) => {
+            if (data.data.code === 20041) {
+              this.searchForm.options = data.data.data.map((item) => {
+                return {
+                  deptId: item.deptId.toString(),
+                  deptName: item.deptName,
+                };
+              });
+            }
+          });
+        }, 200);
+      } else {
+        this.searchForm.options = [];
+      }
+    },
   },
 };
 </script>
 
 <style lang="scss" scoped>
 .register-container {
-  height: 100%;
   display: flex;
   align-items: center;
   flex-direction: column;
-  padding-bottom: 30px;
-  padding-top: 20px;
+  .registered-header {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    margin-top: 30px;
+    width: 1150px;
+    .search {
+      width: 700px;
+      .el-form {
+        width: 100%;
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        .el-select {
+          /deep/ .el-input__inner {
+            cursor: text;
+          }
+        }
+      }
+    }
+  }
+  .el-card {
+    width: 1200px;
+    height: 500px;
+    margin-top: 20px;
+    .el-table {
+      /deep/ .my-header {
+        background-color: #d9edf7;
+        color: black;
+        text-align: center;
+      }
+    }
+  }
 }
 </style>

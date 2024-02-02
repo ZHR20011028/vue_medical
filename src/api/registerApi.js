@@ -2,7 +2,7 @@ import http from "@/utils/request";
 
 //返回注册人数
 export const getRegisters = () => {
-  return http.get("/registers");
+  return http.get("/deptRegisters");
 };
 
 // 挂号
@@ -24,7 +24,12 @@ export const getRegisterOne = (parameter) => {
 
 //查询某个部门的挂号情况
 export const getRegisterByDeptId = (parameter) => {
-  return http.get("/registers/deptId", {
+  return http.get("/deptRegisters/deptId", {
     params: parameter,
   });
+};
+
+//更新挂号状态
+export const modifyRegisterState = (parameter) => {
+  return http.put("/registers", parameter);
 };

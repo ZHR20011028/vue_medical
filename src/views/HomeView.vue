@@ -15,7 +15,7 @@
       <el-col :span="12">
         <el-card class="box-card">
           <div slot="header" class="clearfix">
-            <span>近期值班表</span>
+            <span>值班表</span>
           </div>
           <div class="body">
             <el-table
@@ -24,8 +24,8 @@
               :row-style="{ height: '0' }"
               :cell-style="{ padding: '0' }"
               stripe
+              :header-row-style="{ color: 'black' }"
             >
-              <el-table-column prop="workTime" label="日期"> </el-table-column>
               <el-table-column prop="deptName" label="科室"> </el-table-column>
               <el-table-column prop="doctorName" label="值班医生">
               </el-table-column>
@@ -41,8 +41,20 @@
           <div slot="header" class="clearfix">
             <span>通知</span>
           </div>
-          <div v-for="o in 4" :key="o" class="text item">
-            {{ "列表内容 " + o }}
+          <div class="body">
+            <el-table
+              :data="noticeData"
+              height="180"
+              :row-style="{ height: '0' }"
+              :cell-style="{ padding: '0' }"
+              stripe
+              :header-row-style="{ color: 'black' }"
+            >
+              <el-table-column prop="deptName" label="科室"> </el-table-column>
+              <el-table-column prop="notice" label="通知"> </el-table-column>
+              <el-table-column prop="deptLocation" label="地址">
+              </el-table-column>
+            </el-table>
           </div>
           <div class="footer" style="text-align: right">{{ getDate }}</div>
         </el-card>
@@ -51,20 +63,36 @@
   </el-container>
 </template>
 <script>
-import { getAllWork } from "@/api";
+import { getAllWork, getAllNotice } from "@/api";
 export default {
   data() {
     return {
       workData: [],
+      noticeData: [],
     };
   },
   mounted() {
     this.getAllDoctorWorks();
+    this.getAllNotices();
   },
   methods: {
     getAllDoctorWorks() {
       getAllWork().then((data) => {
         this.workData = data.data.data;
+      });
+    },
+    getAllNotices() {
+      getAllNotice().then((data) => {
+        if (data.data.code === 20041) {
+          this.noticeData = data.data.data.map((item) => {
+            return {
+              deptName: item.deptName,
+              notice:
+                "请" + item.deptRank + "号" + item.patientName + "到诊室！",
+              deptLocation: item.deptLocation,
+            };
+          });
+        }
       });
     },
   },

@@ -1,15 +1,38 @@
 import axios from "axios";
 import router from "@/router";
+import JSONbig from "json-bigint";
 
 const http = axios.create({
   baseURL: "http://localhost:8080",
+  withCredentials: true,
   timeout: 10000, //超时时间
+  transformResponse: [
+    (data) => {
+      try {
+        // 使用 json-bigint 解析响应体
+        return JSONbig.parse(data);
+      } catch (error) {
+        // 如果发生错误，返回原始数据
+        return data;
+      }
+    },
+  ],
 });
 
 //添加请求拦截器
 http.interceptors.request.use(
   function (config) {
-    //请求前做什么
+    // // 获取存储在某处的token
+    // const token = Cookie.get("token");
+    // // 检查是否登录或注册请求
+    // if (
+    //   !config.url.endsWith("/users") &&
+    //   !config.url.endsWith("/registers") &&
+    //   token
+    // ) {
+    //   // 如果不是登录或注册请求，而且有token，则添加到请求头Authorization中
+    //   config.headers['Authorization'] = token;
+    // }
     return config;
   },
   function (error) {

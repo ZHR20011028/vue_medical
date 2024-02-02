@@ -1,0 +1,37 @@
+{
+  "id": "4397606",
+  "name": "医院分针系统",
+  "font_family": "iconfont",
+  "css_prefix_text": "icon-",
+  "description": "",
+  "glyphs": [
+    {
+      "icon_id": "376394",
+      "name": "医生职称",
+      "font_class": "medtitle",
+      "unicode": "e632",
+      "unicode_decimal": 58930
+    },
+    {
+      "icon_id": "4552970",
+      "name": "邮箱",
+      "font_class": "youxiang",
+      "unicode": "e908",
+      "unicode_decimal": 59656
+    },
+    {
+      "icon_id": "6447195",
+      "name": "上架",
+      "font_class": "shangjia",
+      "unicode": "e64b",
+      "unicode_decimal": 58955
+    },
+    {
+      "icon_id": "6447202",
+      "name": "下架",
+      "font_class": "xiajia",
+      "unicode": "e64f",
+      "unicode_decimal": 58959
+    }
+  ]
+}
