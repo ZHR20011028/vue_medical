@@ -8,7 +8,7 @@
     </el-main>
     <el-footer style="height: 35px">
       <div class="footer-div">
-        <span>footer</span>
+        <span>仁心医院</span>
       </div>
     </el-footer>
   </el-container>
@@ -56,6 +56,14 @@ export default {
     width: 100%;
     background-color: #f5f5f5;
     border-top: 1px solid #ddd;
+    .footer-div {
+      display: flex;
+      flex-direction: row-reverse;
+      span{
+        margin-top: 5px;
+        margin-right: 20px;
+      }
+    }
   }
 }
 </style>

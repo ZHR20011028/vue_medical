@@ -141,7 +141,6 @@ export default {
       try {
         const deptData = await getRegisterOne(this.patientId);
         if (deptData.data.code === 20041) {
-          console.log(deptData.data.data.deptId);
           deptId = deptData.data.data.deptId.toString();
         }
       } catch (error) {

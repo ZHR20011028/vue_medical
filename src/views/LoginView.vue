@@ -37,7 +37,9 @@
 </template>
 <script>
 import { login } from "@/api/userApi";
+import { addLog } from "@/api/logApi";
 import Cookie from "js-cookie";
+import moment from "moment";
 export default {
   data() {
     return {
@@ -115,6 +117,11 @@ export default {
                   JSON.stringify(data.data.data.patientData)
                 );
                 Cookie.set("token", data.data.data.token);
+                addLog({
+                  userId: data.data.data.userData.userId.toString(),
+                  logContent: "登录日志",
+                  createTime: moment().format("YYYY-MM-DD hh:mm:SS"),
+                });
                 this.$notify({
                   title: "登录成功",
                   type: "success",
