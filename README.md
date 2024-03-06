@@ -1,24 +1,35 @@
-# vue_medical
+# 医疗分诊前端部分
 
-## Project setup
-```
-npm install
-```
+##  一、环境要求
 
-### Compiles and hot-reloads for development
-```
-npm run serve
-```
+* node v20.6.1
+* npm 9.8.1
+* @vue/cli 5.0.8
 
-### Compiles and minifies for production
-```
-npm run build
-```
+## 二、项目截图
 
-### Lints and fixes files
-```
-npm run lint
-```
+![](./src/assets/readme-image/1.png)
 
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+![](./src/assets/readme-image/2.png)
+
+![](./src/assets/readme-image/3.png)
+
+![](./src/assets/readme-image/4.png)
+
+![](./src/assets/readme-image/5.png)
+
+![](./src/assets/readme-image/6.png)
+
+![](./src/assets/readme-image/7.png)
+
+![](./src/assets/readme-image/8.png)
+
+![](./src/assets/readme-image/9.png)
+
+![](./src/assets/readme-image/10.png)
+
+![](./src/assets/readme-image/11.png)
+
+![](./src/assets/readme-image/12.png)
+
+![](./src/assets/readme-image/13.png)
