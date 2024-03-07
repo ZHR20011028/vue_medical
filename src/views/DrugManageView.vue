@@ -191,7 +191,7 @@
           </template>
         </el-table-column>
         <el-table-column prop="drugsName" label="药品名"> </el-table-column>
-        <el-table-column prop="drugsSpecifications" label="规格" width="75">
+        <el-table-column prop="drugsSpecifications" label="规格" width="110">
         </el-table-column>
         <el-table-column prop="drugsManuFactor" label="生产企业">
         </el-table-column>
@@ -203,7 +203,7 @@
         </el-table-column>
         <el-table-column prop="salePrice" label="销售价格" width="100">
         </el-table-column>
-        <el-table-column label="销售状态" width="100">
+        <el-table-column label="销售状态" >
           <template slot-scope="scope">
             {{ scope.row.saleStatus === "0" ? "正常" : "停售" }}
           </template>

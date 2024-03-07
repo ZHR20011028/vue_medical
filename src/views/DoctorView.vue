@@ -156,7 +156,7 @@
         <el-table-column
           prop="doctorTelephone"
           label="电话"
-          width="110"
+          width="120"
         ></el-table-column>
         <el-table-column
           prop="dateOfEntry"
